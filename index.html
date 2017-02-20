@@ -3,16 +3,16 @@
 <head>
   <meta charset="utf-8">
   
-  <title>My Farm</title>
+  <title>Terrance&#39;s Book Read Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
-<meta property="og:title" content="My Farm">
+<meta property="og:title" content="Terrance's Book Read Note">
 <meta property="og:url" content="http://yoursite.com/index.html">
-<meta property="og:site_name" content="My Farm">
+<meta property="og:site_name" content="Terrance's Book Read Note">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="My Farm">
+<meta name="twitter:title" content="Terrance's Book Read Note">
   
-    <link rel="alternate" href="/atom.xml" title="My Farm" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Terrance&#39;s Book Read Note" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -33,7 +33,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">My Farm</a>
+        <a href="/" id="logo">Terrance&#39;s Book Read Note</a>
       </h1>
       
     </div>
@@ -50,7 +50,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Zoeken"></a>
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
@@ -60,6 +60,86 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-Java内置的观察者实现工具" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/20/Java内置的观察者实现工具/" class="article-date">
+  <time datetime="2017-02-20T13:05:02.000Z" itemprop="datePublished">2017-02-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/20/Java内置的观察者实现工具/">Java内置的观察者实现工具</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Java内置的观察者模式以及guava的EventBus消息发布-订阅类库"><a href="#Java内置的观察者模式以及guava的EventBus消息发布-订阅类库" class="headerlink" title="Java内置的观察者模式以及guava的EventBus消息发布-订阅类库"></a>Java内置的观察者模式以及guava的EventBus消息发布-订阅类库</h3><h4 id="java的观察者模式"><a href="#java的观察者模式" class="headerlink" title="java的观察者模式"></a>java的观察者模式</h4><p>作为最常见是的设计模式，观察家模式为系统的解耦立下了汗马功劳.Java的JDK内置了观察者的工具类.记录下基本的使用方法。</p>
+<p>Java实现观察者主要是<code>Observer</code>和<code>Observable</code>;</p>
+<p>顾名思义，Observable的意思是可以被观察的，用于被监视的对象。Observer是观察者，定义观察者对象.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//被观察者</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Template</span> <span class="keyword">extends</span> <span class="title">Observable</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(Template.class);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Template template = <span class="keyword">new</span> Template();</div><div class="line">        <span class="comment">//要先注册需要的观察者，可以多个，可以一个</span></div><div class="line">        template.addObserver(<span class="keyword">new</span> Watcher());</div><div class="line">        <span class="comment">//一定要先设置changed，再调用通知注册的观察者</span></div><div class="line">        template.setChanged();</div><div class="line">        template.notifyObservers();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//观察者</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Watcher</span> <span class="keyword">implements</span> <span class="title">Observer</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(Watcher.class);</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">(Observable o, Object arg)</span> </span>&#123;</div><div class="line">        System.out.println(<span class="string">"changed"</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="Guava的方式有点类似于观察者模式-使用上更加简单"><a href="#Guava的方式有点类似于观察者模式-使用上更加简单" class="headerlink" title="Guava的方式有点类似于观察者模式,使用上更加简单"></a><a href="https://github.com/google/guava" target="_blank" rel="external">Guava</a>的方式有点类似于观察者模式,使用上更加简单</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EventBusDemo</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(EventBusDemo.class);</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</div><div class="line">        EventBus eventBus = <span class="keyword">new</span> EventBus();</div><div class="line">        eventBus.register(<span class="keyword">new</span> Subscriber());</div><div class="line">        eventBus.post(<span class="keyword">new</span> MyEvent(String.valueOf(finalI)));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//订阅者</span></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">Subscriber</span> </span>&#123;</div><div class="line">        <span class="meta">@Subscribe</span></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fired</span><span class="params">(MyEvent myEvent)</span> </span>&#123;</div><div class="line">            logger.info(<span class="string">"myevent 被催发 &#123;&#125;"</span>, myEvent.getName());</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">MyEvent</span> </span>&#123;</div><div class="line">        String name;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> name;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.name = name;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">MyEvent</span><span class="params">(String name)</span> </span>&#123;</div><div class="line">            <span class="keyword">this</span>.name = name;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/20/Java内置的观察者实现工具/" data-id="cize4p68000061ccdeguqp79t" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-设计模式之装饰模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/20/设计模式之装饰模式/" class="article-date">
+  <time datetime="2017-02-20T13:04:30.000Z" itemprop="datePublished">2017-02-20</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/20/设计模式之装饰模式/">设计模式之装饰模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="装饰器是模式是装饰一个类"><a href="#装饰器是模式是装饰一个类" class="headerlink" title="装饰器是模式是装饰一个类"></a>装饰器是模式是装饰一个类</h3><p>比如卖咖啡的例子，通过一些装饰类来装饰几个基本类，实现组合的目的.</p>
+<p>一个咖啡店，卖咖啡。基础的咖啡有<code>浓咖啡</code>，<code>淡咖啡</code>，还可以选择加上配料，<code>抹茶</code>.<code>抹茶</code>就是咖啡的装饰器,加上抹茶就要加上抹茶的钱<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * 饮料店基类</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Beverage</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(Beverage.class);</div><div class="line"></div><div class="line">    String description = <span class="string">"unKnown Drink"</span>;</div><div class="line"></div><div class="line">    CupSize size;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> CupSize <span class="title">getSize</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> size;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSize</span><span class="params">(CupSize size)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.size = size;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> description;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> CupSize &#123;</div><div class="line">    BIG,MEDIUM,SMALL;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 调料类，组合基本基料</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Condiment</span> <span class="keyword">extends</span> <span class="title">Beverage</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(Condiment.class);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">getDescription</span><span class="params">()</span></span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 一种饮料，不含有配料</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Espresso</span> <span class="keyword">extends</span> <span class="title">Beverage</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(Espresso.class);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Espresso</span><span class="params">(CupSize size)</span> </span>&#123;</div><div class="line">        description = <span class="string">"Espresso Drink"</span>;</div><div class="line">        setSize(size);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">double</span> cost=<span class="number">0</span>;</div><div class="line">        <span class="keyword">if</span> (getSize()==CupSize.BIG)&#123;</div><div class="line">            cost = <span class="number">12</span>;</div><div class="line">        &#125;<span class="keyword">if</span> (getSize()==CupSize.MEDIUM)&#123;</div><div class="line">            cost = <span class="number">10</span>;</div><div class="line">        &#125;<span class="keyword">if</span> (getSize()==CupSize.SMALL)&#123;</div><div class="line">            cost = <span class="number">8</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> cost;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Mocha包装了Beverage基类Coffee</div><div class="line"> */</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Mocha</span> <span class="keyword">extends</span> <span class="title">Condiment</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(Mocha.class);</div><div class="line"></div><div class="line">    <span class="comment">//基本的饮料</span></div><div class="line">    Beverage beverage;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Mocha</span><span class="params">(Beverage beverage)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.beverage = beverage;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getDescription</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> beverage.getDescription() + <span class="string">",Mocha"</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">double</span> <span class="title">cost</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> <span class="number">0.2</span>+beverage.cost();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SellCoffee</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(SellCoffee.class);</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</div><div class="line">        Beverage espresso = <span class="keyword">new</span> Espresso(Enum.valueOf(CupSize.class,<span class="string">"BIG"</span>));</div><div class="line"></div><div class="line">        Beverage m = <span class="keyword">new</span> Mocha(espresso);</div><div class="line"></div><div class="line">        System.out.println(m.getDescription()+<span class="string">"===="</span> + m.cost());</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到，Beverage是基本的饮料属性，Espresso是具体的饮料. 如果要买饮料，Espresso+Mocha，可以定义Mocha装饰器，用来装饰Beverage，<br>实现组合的目的.</p>
+<p>Java里面的io流多采用了装饰器模式,很多都是InputStream的装饰器,知道这一点就对java io的结构清晰了不少，但是装饰器模式的缺点也很明显，就是会有很多的小类,<br>装饰类，基类的实现类。造成类的数量膨胀。<br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/20/java_io.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/20/设计模式之装饰模式/" data-id="cize4p68300071ccduqkn5n3g" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-Java中catch语句中的return-对finally的影响" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -94,7 +174,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/19/Java中catch语句中的return-对finally的影响/" data-id="cizc248u000030wcd56zqz6wn" class="article-share-link">Delen</a>
+      <a data-url="http://yoursite.com/2017/02/19/Java中catch语句中的return-对finally的影响/" data-id="cize4p67j00011ccdt64sdora" class="article-share-link">Share</a>
       
       
     </footer>
@@ -104,9 +184,9 @@
 
 
   
-    <article id="post-20017年读书技术" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-20017年读书计划" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/14/20017年读书技术/" class="article-date">
+    <a href="/2017/02/14/20017年读书计划/" class="article-date">
   <time datetime="2017-02-14T13:33:04.000Z" itemprop="datePublished">2017-02-14</time>
 </a>
     
@@ -118,7 +198,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/14/20017年读书技术/">2017年读书技术</a>
+      <a class="article-title" href="/2017/02/14/20017年读书计划/">2017年读书计划</a>
     </h1>
   
 
@@ -129,14 +209,15 @@
         <h3 id="2017年读书计划"><a href="#2017年读书计划" class="headerlink" title="2017年读书计划"></a>2017年读书计划</h3><ul>
 <li><a href="https://book.douban.com/subject/10484692/" target="_blank" rel="external">Java并发编程</a><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/14/jcip.jpg" alt="Java并发编程"></li>
 <li>Spring原理的书籍</li>
-<li><a href="https://book.douban.com/subject/4260618/" target="_blank" rel="external">设计模式之禅</a></li>
+<li><a href="https://book.douban.com/subject/4260618/" target="_blank" rel="external">设计模式之禅</a> 或者 head first 设计模式</li>
 <li>分布式知识(学习zookeeper)</li>
+<li>阅读junit代码，jive代码,JDK中collection代码(可以参照<a href="https://mp.weixin.qq.com/s?__biz=MzAxOTc0NzExNg==&amp;mid=415513252&amp;idx=1&amp;sn=1c1211e23c507c34f9befbf5282a85c8&amp;scene=21&amp;key=5dc853c8a5b0621b56f44fe8eab7cd0624c4f3a64a1ec85f75541181470c88ad32dab13c33951cb8d8cd8c4240022b172bc07033fce1f35727a12b9066dfc24e8111aa77cce15cbec7ca8bd4003b8014&amp;ascene=7&amp;uin=MTQxNDQ0&amp;devicetype=android-23&amp;version=26050434&amp;nettype=WIFI&amp;abtest_cookie=AQABAAgAAQBDhh4AAAA%3D&amp;pass_ticket=HBiMc8rF50dTEQdp1wl%2FdyPS%2Bmr%2BewYOWHh5%2BwtSPgs%3D&amp;wx_header=1" target="_blank" rel="external">大牛的学习目录</a>)</li>
 </ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/14/20017年读书技术/" data-id="cizc248tn00000wcdnnbc1ufm" class="article-share-link">Delen</a>
+      <a data-url="http://yoursite.com/2017/02/14/20017年读书计划/" data-id="cize4p67d00001ccd0tzy3t7j" class="article-share-link">Share</a>
       
       
     </footer>
@@ -178,7 +259,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/11/JavaScript-Loadash库的使用/" data-id="cizc248u500050wcdqx2iwqri" class="article-share-link">Delen</a>
+      <a data-url="http://yoursite.com/2017/02/11/JavaScript-Loadash库的使用/" data-id="cize4p67o00021ccdswlgr8le" class="article-share-link">Share</a>
       
       
     </footer>
@@ -217,7 +298,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/11/我的第二篇文档/" data-id="cizc248u200040wcdn6a2cpn7" class="article-share-link">Delen</a>
+      <a data-url="http://yoursite.com/2017/02/11/我的第二篇文档/" data-id="cize4p67w00051ccdruxnkdu2" class="article-share-link">Share</a>
       
       
     </footer>
@@ -253,7 +334,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/21/test/" data-id="cizc248ty00020wcdmjlz6my7" class="article-share-link">Delen</a>
+      <a data-url="http://yoursite.com/2017/01/21/test/" data-id="cize4p67u00041ccd411quwc0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -298,7 +379,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/21/hello-world/" data-id="cizc248tt00010wcd6ehtbuq2" class="article-share-link">Delen</a>
+      <a data-url="http://yoursite.com/2017/01/21/hello-world/" data-id="cize4p67r00031ccd7n51wz0v" class="article-share-link">Share</a>
       
       
     </footer>
@@ -323,7 +404,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archieven</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
     </div>
@@ -333,28 +414,28 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recente berichten</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2017/02/20/Java内置的观察者实现工具/">Java内置的观察者实现工具</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/20/设计模式之装饰模式/">设计模式之装饰模式</a>
+          </li>
         
           <li>
             <a href="/2017/02/19/Java中catch语句中的return-对finally的影响/">Java中catch语句中的return 对finally的影响</a>
           </li>
         
           <li>
-            <a href="/2017/02/14/20017年读书技术/">2017年读书技术</a>
+            <a href="/2017/02/14/20017年读书计划/">2017年读书计划</a>
           </li>
         
           <li>
             <a href="/2017/02/11/JavaScript-Loadash库的使用/">JavaScript Loadash库的使用</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/11/我的第二篇文档/">我的第二篇文档</a>
-          </li>
-        
-          <li>
-            <a href="/2017/01/21/test/">&#39;test&#39;</a>
           </li>
         
       </ul>
@@ -369,7 +450,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017 My Farm<br>
+      &copy; 2017 Terrance&#39;s Book Read Note<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
