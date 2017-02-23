@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java内置锁锁的是对象的实例 | Terrance&#39;s Book Read Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一定要加深理解，如果是prototype，这块就要考虑清楚
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263import org.junit.Test;import org.slf4j.Logger;import">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内置锁锁的是对象的实例">
+<meta property="og:url" content="http://yoursite.com/2017/02/23/Java内置锁锁的是对象的实例/index.html">
+<meta property="og:site_name" content="Terrance's Book Read Note">
+<meta property="og:description" content="一定要加深理解，如果是prototype，这块就要考虑清楚
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263import org.junit.Test;import org.slf4j.Logger;import">
+<meta property="og:updated_time" content="2017-02-23T13:30:05.492Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java内置锁锁的是对象的实例">
+<meta name="twitter:description" content="一定要加深理解，如果是prototype，这块就要考虑清楚
+123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263import org.junit.Test;import org.slf4j.Logger;import">
+  
+    <link rel="alternate" href="/atom.xml" title="Terrance&#39;s Book Read Note" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Terrance&#39;s Book Read Note</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">What I write here is shit</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Java内置锁锁的是对象的实例" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/23/Java内置锁锁的是对象的实例/" class="article-date">
+  <time datetime="2017-02-23T13:28:41.000Z" itemprop="datePublished">2017-02-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Java内置锁锁的是对象的实例
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一定要加深理解，如果是prototype，这块就要考虑清楚</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.junit.Test;</div><div class="line"><span class="keyword">import</span> org.slf4j.Logger;</div><div class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedOnObjecctOrClass</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(SynchronizedOnObjecctOrClass.class);</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * synchronized 是锁的当前对象的实例，如果是多实例，就不是内置锁或者监视器锁了</div><div class="line">     * 结果应该是偶数的递增</div><div class="line">     */</div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sameEvenObject</span><span class="params">()</span></span>&#123;</div><div class="line">        Even even = <span class="keyword">new</span> Even();</div><div class="line">        ExecutorService fixedThreadPool = Executors.newFixedThreadPool(<span class="number">20</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">            fixedThreadPool.execute(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    even.nextOdd();</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        System.out.println(even.n);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 锁分别是各种对象，</div><div class="line">     * 结果是10个2</div><div class="line">     */</div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">diffEvenObject</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">//z注意啊，启动10个线程不是这样写的，这样是10长度的线程池里面执行了一个线程</span></div><div class="line">        <span class="comment">//Executors.newFixedThreadPool(10).execute(new Runnable() &#123;****&#125;);</span></div><div class="line">        ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(<span class="number">20</span>);</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">            newFixedThreadPool.execute(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">new</span> Even().nextOdd();</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Even</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> n=<span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">nextOdd</span><span class="params">()</span></span>&#123;</div><div class="line">        ++n;</div><div class="line">        ++n;</div><div class="line">        System.out.println(n);</div><div class="line">        <span class="keyword">return</span> n;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/23/Java内置锁锁的是对象的实例/" data-id="cizifkc0g0004awcdbyanyt66" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/23/java多线程之发觉并行性/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          java多线程之发觉并行性
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/23/java线程之线程池/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">java线程之线程池</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/23/java多线程之发觉并行性/">java多线程之发觉并行性</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/Java内置锁锁的是对象的实例/">Java内置锁锁的是对象的实例</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/java线程之线程池/">java线程之线程池</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/21/设计模式之单例模式/">设计模式之单例模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/21/设计模式之工厂模式/">设计模式之工厂模式</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Terrance&#39;s Book Read Note<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

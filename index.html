@@ -36,6 +36,10 @@
         <a href="/" id="logo">Terrance&#39;s Book Read Note</a>
       </h1>
       
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">What I write here is shit</a>
+        </h2>
+      
     </div>
     <div id="header-inner" class="inner">
       <nav id="main-nav">
@@ -60,6 +64,132 @@
 </header>
       <div class="outer">
         <section id="main">
+  
+    <article id="post-java多线程之发觉并行性" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/23/java多线程之发觉并行性/" class="article-date">
+  <time datetime="2017-02-23T13:28:57.000Z" itemprop="datePublished">2017-02-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/23/java多线程之发觉并行性/">java多线程之发觉并行性</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>为了挺高性能，某些操作耦合度较低的可以分离开来,例如操作A和B分别是不同的逻辑，但是A处理期间希望B也在处理，等到A处理完成后B获取就好了。不必等到<br>A执行完成再执行B这种线性顺序。</p>
+<p>如下代码表示了先调用B的逻辑，再B的执行过程中，执行A的逻辑;假设B需要5s，A需要4s；</p>
+<p>然而这种方式也有缺点，当A和B的线程执行时间相差较大时候，性能却提升十分有限.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CallableTest</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(CallableTest.class);</div><div class="line"></div><div class="line"></div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testAsycCall</span><span class="params">()</span> </span>&#123;</div><div class="line"></div><div class="line">        Callable&lt;Integer&gt; integerCallable = <span class="keyword">new</span> Callable&lt;Integer&gt;() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> Integer <span class="title">call</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</div><div class="line">                <span class="comment">//模拟耗时操作，5秒后返回20</span></div><div class="line">                TimeUnit.SECONDS.sleep(<span class="number">10</span>);</div><div class="line">                logger.info(<span class="string">"模拟耗时操作B，10秒后返回20"</span>);</div><div class="line">                <span class="keyword">return</span> <span class="number">20</span>;</div><div class="line">            &#125;</div><div class="line">        &#125;;</div><div class="line">        <span class="comment">//启动线程</span></div><div class="line">        logger.info(<span class="string">"启动线程"</span>);</div><div class="line">        Future&lt;Integer&gt; submit = Executors.newFixedThreadPool(<span class="number">2</span>).submit(integerCallable);</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            <span class="comment">//模拟处理其他逻辑，同integerCallable不相关的逻辑（在处理其他业务期间，integerCallable已经执行或者已经执行完成）</span></div><div class="line">            logger.info(<span class="string">"处理其他业务A"</span>);</div><div class="line">            TimeUnit.SECONDS.sleep(<span class="number">4</span>);</div><div class="line">            logger.info(<span class="string">"A处理完毕,等待B线程执行完成"</span>);</div><div class="line">            logger.info(<span class="string">"获取结果"</span> + String.valueOf(submit.get()));</div><div class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">catch</span> (ExecutionException e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>执行的结果<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">[<span class="number">02</span>-<span class="number">23</span> <span class="number">15</span>:<span class="number">55</span>:<span class="number">44</span>,<span class="number">311</span> INFO ] CallableTest.java:<span class="number">33</span> - 启动线程</div><div class="line">[<span class="number">02</span>-<span class="number">23</span> <span class="number">15</span>:<span class="number">55</span>:<span class="number">44</span>,<span class="number">320</span> INFO ] CallableTest.java:<span class="number">37</span> - 处理其他业务A</div><div class="line">[<span class="number">02</span>-<span class="number">23</span> <span class="number">15</span>:<span class="number">55</span>:<span class="number">48</span>,<span class="number">320</span> INFO ] CallableTest.java:<span class="number">39</span> - A处理完毕,等待B线程执行完成</div><div class="line">[<span class="number">02</span>-<span class="number">23</span> <span class="number">15</span>:<span class="number">55</span>:<span class="number">54</span>,<span class="number">321</span> INFO ] CallableTest.java:<span class="number">28</span> - 模拟耗时操作B，<span class="number">10</span>秒后返回<span class="number">20</span></div><div class="line">[<span class="number">02</span>-<span class="number">23</span> <span class="number">15</span>:<span class="number">55</span>:<span class="number">54</span>,<span class="number">321</span> INFO ] CallableTest.java:<span class="number">40</span> - 获取结果<span class="number">20</span></div></pre></td></tr></table></figure></p>
+<p>一组任务可以放进ExecutorCompletionServicez中，实现一个task完成就执行处理当前完成结果。大大的提高了并行性; 代码可以查看<br><a href="http://grepcode.com/file/repository.grepcode.com/java/root/jdk/openjdk/8u40-b25/java/util/concurrent/ExecutorCompletionService.java#ExecutorCompletionService" target="_blank" rel="external">ExecutorCompletionService</a>的sample代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//一组任务并行执行，获取第一个不为空的结果,ignore可能出现的异常并取消其他的执行的任务</span></div><div class="line"> <span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">(Executor e, Collection&lt;Callable&lt;Result&gt;&gt; solvers)</span></span></div><div class="line">     <span class="keyword">throws</span> InterruptedException &#123;</div><div class="line">     CompletionService&lt;Result&gt; ecs = <span class="keyword">new</span> ExecutorCompletionService&lt;Result&gt;(e);</div><div class="line">     <span class="keyword">int</span> n = solvers.size();</div><div class="line">     List&lt;Future&lt;Result&gt;&gt; futures  = <span class="keyword">new</span> ArrayList&lt;Future&lt;Result&gt;&gt;(n);</div><div class="line">     Result result = <span class="keyword">null</span>;</div><div class="line">     <span class="keyword">try</span> &#123;</div><div class="line">         <span class="keyword">for</span> (Callable&lt;Result&gt; s : solvers)</div><div class="line">             futures.add(ecs.submit(s));</div><div class="line">         <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</div><div class="line">             <span class="keyword">try</span> &#123;</div><div class="line">                 Result r = ecs.take().get();</div><div class="line">                 <span class="keyword">if</span> (r != <span class="keyword">null</span>) &#123;</div><div class="line">                     result = r;</div><div class="line">                     <span class="keyword">break</span>;</div><div class="line">                 </div><div class="line">             &#125; <span class="keyword">catch</span> (ExecutionException ignore) &#123;&#125;</div><div class="line">         &#125;</div><div class="line">     &#125;</div><div class="line">     <span class="keyword">finally</span> &#123;</div><div class="line">         <span class="keyword">for</span> (Future&lt;Result&gt; f : futures)</div><div class="line">             f.cancel(<span class="keyword">true</span>);</div><div class="line">     &#125;</div><div class="line"></div><div class="line">     <span class="keyword">if</span> (result != <span class="keyword">null</span>)</div><div class="line">         use(result);</div><div class="line"> &#125;&#125;</div></pre></td></tr></table></figure>
+<p>线程池还提供了一个简便的方法执行一组独立的线程 <code>invokeAll(Collection&lt;? extends Callable&lt;T&gt;&gt; tasks,
+long timeout, TimeUnit unit)</code> 当线程全部执行完成，或者线程被中断，超时，invokeAll将返回，当超时时，未完成的线程将会被取消。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/23/java多线程之发觉并行性/" data-id="cizifkc0s0007awcd9yfdoav4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Java内置锁锁的是对象的实例" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/23/Java内置锁锁的是对象的实例/" class="article-date">
+  <time datetime="2017-02-23T13:28:41.000Z" itemprop="datePublished">2017-02-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/23/Java内置锁锁的是对象的实例/">Java内置锁锁的是对象的实例</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一定要加深理解，如果是prototype，这块就要考虑清楚</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> org.junit.Test;</div><div class="line"><span class="keyword">import</span> org.slf4j.Logger;</div><div class="line"><span class="keyword">import</span> org.slf4j.LoggerFactory;</div><div class="line"></div><div class="line"><span class="keyword">import</span> java.util.concurrent.ExecutorService;</div><div class="line"><span class="keyword">import</span> java.util.concurrent.Executors;</div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedOnObjecctOrClass</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Logger logger = LoggerFactory.getLogger(SynchronizedOnObjecctOrClass.class);</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * synchronized 是锁的当前对象的实例，如果是多实例，就不是内置锁或者监视器锁了</div><div class="line">     * 结果应该是偶数的递增</div><div class="line">     */</div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sameEvenObject</span><span class="params">()</span></span>&#123;</div><div class="line">        Even even = <span class="keyword">new</span> Even();</div><div class="line">        ExecutorService fixedThreadPool = Executors.newFixedThreadPool(<span class="number">20</span>);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">            fixedThreadPool.execute(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    even.nextOdd();</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        System.out.println(even.n);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     * 锁分别是各种对象，</div><div class="line">     * 结果是10个2</div><div class="line">     */</div><div class="line">    <span class="meta">@Test</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">diffEvenObject</span><span class="params">()</span></span>&#123;</div><div class="line"></div><div class="line">        <span class="comment">//z注意啊，启动10个线程不是这样写的，这样是10长度的线程池里面执行了一个线程</span></div><div class="line">        <span class="comment">//Executors.newFixedThreadPool(10).execute(new Runnable() &#123;****&#125;);</span></div><div class="line">        ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(<span class="number">20</span>);</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</div><div class="line">            newFixedThreadPool.execute(<span class="keyword">new</span> Runnable() &#123;</div><div class="line">                <span class="meta">@Override</span></div><div class="line">                <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">                    <span class="keyword">new</span> Even().nextOdd();</div><div class="line">                &#125;</div><div class="line">            &#125;);</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Even</span></span>&#123;</div><div class="line">    <span class="keyword">int</span> n=<span class="number">0</span>;</div><div class="line">    <span class="function"><span class="keyword">synchronized</span> <span class="keyword">int</span> <span class="title">nextOdd</span><span class="params">()</span></span>&#123;</div><div class="line">        ++n;</div><div class="line">        ++n;</div><div class="line">        System.out.println(n);</div><div class="line">        <span class="keyword">return</span> n;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/23/Java内置锁锁的是对象的实例/" data-id="cizifkc0g0004awcdbyanyt66" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-java线程之线程池" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/23/java线程之线程池/" class="article-date">
+  <time datetime="2017-02-23T13:28:28.000Z" itemprop="datePublished">2017-02-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/23/java线程之线程池/">java线程之线程池</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Executor框架"><a href="#Executor框架" class="headerlink" title="Executor框架"></a>Executor框架</h3><p>Executor框架的好处，其实就是线程池的好处，可以复用线程，降低每次新建线程的消耗。<br>结构上将任务体和执行策略分离开来,有助于在部署阶段选择与可用资源最匹配的执行策略.</p>
+<p>可以使用Executors工具创建线程池</p>
+<ul>
+<li>newFixedThreadPool 创建一个固定长度的线程池，提交一个任务就创建一个线程,直到达到<br>线程池的最大尺寸</li>
+<li>newCachedThreadPool 可缓存的线程池，如果当前线程规模超过处理需求，回收空闲线程，<br>当需求增加时，增加新的线程。缓存线程池不存在任何限制.</li>
+<li>newSingleThreadPool 单线程的线程池.如果线程异常出错，就创建一个新的线程.newSingleThreadPool<br>按照队列中的顺序穿行执行.</li>
+<li>newScheduledThreadPool 创建一个<font color="red">固定长度</font>的线程池，并用延迟或者定时的方法来执行其中的线程.</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/23/java线程之线程池/" data-id="cizifkc0o0006awcd0930xrq4" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
   
     <article id="post-设计模式之单例模式" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -99,7 +229,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/21/设计模式之单例模式/" data-id="cizfl3hxi0007fscdvz9xfv0i" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/21/设计模式之单例模式/" data-id="cizifkc100008awcdkc0v7oo8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -142,7 +272,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/21/设计模式之工厂模式/" data-id="cizfl3hxs0009fscdbw9dga8j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/21/设计模式之工厂模式/" data-id="cizifkc17000cawcdeucfbdnf" class="article-share-link">Share</a>
       
       
     </footer>
@@ -182,7 +312,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/20/Java内置的观察者实现工具/" data-id="cizfl3hx50003fscd4mq9vt0l" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/20/Java内置的观察者实现工具/" data-id="cizifkc0j0005awcd376hj8m0" class="article-share-link">Share</a>
       
       
     </footer>
@@ -222,7 +352,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/20/设计模式之装饰模式/" data-id="cizfl3hxq0008fscd7lr6gbmn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/20/设计模式之装饰模式/" data-id="cizifkc15000bawcdewfgpktz" class="article-share-link">Share</a>
       
       
     </footer>
@@ -265,7 +395,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/19/Java中catch语句中的return-对finally的影响/" data-id="cizfl3hx20002fscdabptun7t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/19/Java中catch语句中的return-对finally的影响/" data-id="cizifkc0a0002awcdhuidxok1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -308,7 +438,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/14/20017年读书计划/" data-id="cizfl3hwf0000fscd1fu7f4j6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/14/20017年读书计划/" data-id="cizifkc050001awcd9fk5ji3p" class="article-share-link">Share</a>
       
       
     </footer>
@@ -350,127 +480,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/11/JavaScript-Loadash库的使用/" data-id="cizfl3hwl0001fscds112lz4e" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-我的第二篇文档" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/11/我的第二篇文档/" class="article-date">
-  <time datetime="2017-02-11T10:45:55.000Z" itemprop="datePublished">2017-02-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/02/11/我的第二篇文档/">我的第二篇文档</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="我的第二篇文档"><a href="#我的第二篇文档" class="headerlink" title="我的第二篇文档"></a>我的第二篇文档</h3><ul>
-<li>是如何写一个class</li>
-</ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public class Main()&#123;</div><div class="line">  public static void main(String args[])&#123;</div><div class="line">   System.out.println(&quot;1==1&quot;);</div><div class="line"> &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/11/我的第二篇文档/" data-id="cizfl3hxb0005fscdrsjl9ar8" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-test" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/21/test/" class="article-date">
-  <time datetime="2017-01-21T09:29:22.000Z" itemprop="datePublished">2017-01-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/21/test/">&#39;test&#39;</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="这是使用hexo写的第一篇blog"><a href="#这是使用hexo写的第一篇blog" class="headerlink" title="这是使用hexo写的第一篇blog"></a>这是使用hexo写的第一篇blog</h3>
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/21/test/" data-id="cizfl3hxf0006fscdd1h2dbeq" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/21/hello-world/" class="article-date">
-  <time datetime="2017-01-21T09:18:19.560Z" itemprop="datePublished">2017-01-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/21/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/21/hello-world/" data-id="cizfl3hx70004fscdvk0bkhi9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/11/JavaScript-Loadash库的使用/" data-id="cizifkbzz0000awcdqml5ox40" class="article-share-link">Share</a>
       
       
     </footer>
@@ -481,6 +491,10 @@
 
   
 
+
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">__('next') &raquo;</a>
+  </nav>
 </section>
         
           <aside id="sidebar">
@@ -510,23 +524,23 @@
       <ul>
         
           <li>
+            <a href="/2017/02/23/java多线程之发觉并行性/">java多线程之发觉并行性</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/Java内置锁锁的是对象的实例/">Java内置锁锁的是对象的实例</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/23/java线程之线程池/">java线程之线程池</a>
+          </li>
+        
+          <li>
             <a href="/2017/02/21/设计模式之单例模式/">设计模式之单例模式</a>
           </li>
         
           <li>
             <a href="/2017/02/21/设计模式之工厂模式/">设计模式之工厂模式</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/20/Java内置的观察者实现工具/">Java内置的观察者实现工具</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/20/设计模式之装饰模式/">设计模式之装饰模式</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/19/Java中catch语句中的return-对finally的影响/">Java中catch语句中的return 对finally的影响</a>
           </li>
         
       </ul>

@@ -3,35 +3,30 @@
 <head>
   <meta charset="utf-8">
   
-  <title>2017年读书计划 | Terrance&#39;s Book Read Note</title>
+  <title>java线程之线程池 | Terrance&#39;s Book Read Note</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="2017年读书计划
-Java并发编程
-Spring原理的书籍
-设计模式之禅 或者 head first 设计模式
-分布式知识(学习zookeeper)
-阅读junit代码，jive代码,JDK中collection代码(可以参照大牛的学习目录)">
+  <meta name="description" content="Executor框架Executor框架的好处，其实就是线程池的好处，可以复用线程，降低每次新建线程的消耗。结构上将任务体和执行策略分离开来,有助于在部署阶段选择与可用资源最匹配的执行策略.
+可以使用Executors工具创建线程池
+
+newFixedThreadPool 创建一个固定长度的线程池，提交一个任务就创建一个线程,直到达到线程池的最大尺寸
+newCachedThreadPool 可缓存">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2017年读书计划">
-<meta property="og:url" content="http://yoursite.com/2017/02/14/20017年读书计划/index.html">
+<meta property="og:title" content="java线程之线程池">
+<meta property="og:url" content="http://yoursite.com/2017/02/23/java线程之线程池/index.html">
 <meta property="og:site_name" content="Terrance's Book Read Note">
-<meta property="og:description" content="2017年读书计划
-Java并发编程
-Spring原理的书籍
-设计模式之禅 或者 head first 设计模式
-分布式知识(学习zookeeper)
-阅读junit代码，jive代码,JDK中collection代码(可以参照大牛的学习目录)">
-<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/14/jcip.jpg">
-<meta property="og:updated_time" content="2017-02-20T13:16:57.000Z">
+<meta property="og:description" content="Executor框架Executor框架的好处，其实就是线程池的好处，可以复用线程，降低每次新建线程的消耗。结构上将任务体和执行策略分离开来,有助于在部署阶段选择与可用资源最匹配的执行策略.
+可以使用Executors工具创建线程池
+
+newFixedThreadPool 创建一个固定长度的线程池，提交一个任务就创建一个线程,直到达到线程池的最大尺寸
+newCachedThreadPool 可缓存">
+<meta property="og:updated_time" content="2017-02-23T13:30:06.547Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2017年读书计划">
-<meta name="twitter:description" content="2017年读书计划
-Java并发编程
-Spring原理的书籍
-设计模式之禅 或者 head first 设计模式
-分布式知识(学习zookeeper)
-阅读junit代码，jive代码,JDK中collection代码(可以参照大牛的学习目录)">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/14/jcip.jpg">
+<meta name="twitter:title" content="java线程之线程池">
+<meta name="twitter:description" content="Executor框架Executor框架的好处，其实就是线程池的好处，可以复用线程，降低每次新建线程的消耗。结构上将任务体和执行策略分离开来,有助于在部署阶段选择与可用资源最匹配的执行策略.
+可以使用Executors工具创建线程池
+
+newFixedThreadPool 创建一个固定长度的线程池，提交一个任务就创建一个线程,直到达到线程池的最大尺寸
+newCachedThreadPool 可缓存">
   
     <link rel="alternate" href="/atom.xml" title="Terrance&#39;s Book Read Note" type="application/atom+xml">
   
@@ -84,10 +79,10 @@ Spring原理的书籍
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-20017年读书计划" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-java线程之线程池" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/14/20017年读书计划/" class="article-date">
-  <time datetime="2017-02-14T13:33:04.000Z" itemprop="datePublished">2017-02-14</time>
+    <a href="/2017/02/23/java线程之线程池/" class="article-date">
+  <time datetime="2017-02-23T13:28:28.000Z" itemprop="datePublished">2017-02-23</time>
 </a>
     
   </div>
@@ -98,7 +93,7 @@ Spring原理的书籍
         
   
     <h1 class="article-title" itemprop="name">
-      2017年读书计划
+      java线程之线程池
     </h1>
   
 
@@ -106,18 +101,19 @@ Spring原理的书籍
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="2017年读书计划"><a href="#2017年读书计划" class="headerlink" title="2017年读书计划"></a>2017年读书计划</h3><ul>
-<li><a href="https://book.douban.com/subject/10484692/" target="_blank" rel="external">Java并发编程</a><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/14/jcip.jpg" alt="Java并发编程"></li>
-<li>Spring原理的书籍</li>
-<li><a href="https://book.douban.com/subject/4260618/" target="_blank" rel="external">设计模式之禅</a> 或者 head first 设计模式</li>
-<li>分布式知识(学习zookeeper)</li>
-<li>阅读junit代码，jive代码,JDK中collection代码(可以参照<a href="https://mp.weixin.qq.com/s?__biz=MzAxOTc0NzExNg==&amp;mid=415513252&amp;idx=1&amp;sn=1c1211e23c507c34f9befbf5282a85c8&amp;scene=21&amp;key=5dc853c8a5b0621b56f44fe8eab7cd0624c4f3a64a1ec85f75541181470c88ad32dab13c33951cb8d8cd8c4240022b172bc07033fce1f35727a12b9066dfc24e8111aa77cce15cbec7ca8bd4003b8014&amp;ascene=7&amp;uin=MTQxNDQ0&amp;devicetype=android-23&amp;version=26050434&amp;nettype=WIFI&amp;abtest_cookie=AQABAAgAAQBDhh4AAAA%3D&amp;pass_ticket=HBiMc8rF50dTEQdp1wl%2FdyPS%2Bmr%2BewYOWHh5%2BwtSPgs%3D&amp;wx_header=1" target="_blank" rel="external">大牛的学习目录</a>)</li>
+        <h3 id="Executor框架"><a href="#Executor框架" class="headerlink" title="Executor框架"></a>Executor框架</h3><p>Executor框架的好处，其实就是线程池的好处，可以复用线程，降低每次新建线程的消耗。<br>结构上将任务体和执行策略分离开来,有助于在部署阶段选择与可用资源最匹配的执行策略.</p>
+<p>可以使用Executors工具创建线程池</p>
+<ul>
+<li>newFixedThreadPool 创建一个固定长度的线程池，提交一个任务就创建一个线程,直到达到<br>线程池的最大尺寸</li>
+<li>newCachedThreadPool 可缓存的线程池，如果当前线程规模超过处理需求，回收空闲线程，<br>当需求增加时，增加新的线程。缓存线程池不存在任何限制.</li>
+<li>newSingleThreadPool 单线程的线程池.如果线程异常出错，就创建一个新的线程.newSingleThreadPool<br>按照队列中的顺序穿行执行.</li>
+<li>newScheduledThreadPool 创建一个<font color="red">固定长度</font>的线程池，并用延迟或者定时的方法来执行其中的线程.</li>
 </ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/14/20017年读书计划/" data-id="cizifkc050001awcd9fk5ji3p" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/23/java线程之线程池/" data-id="cizifkc0o0006awcd0930xrq4" class="article-share-link">Share</a>
       
       
     </footer>
@@ -126,19 +122,19 @@ Spring原理的书籍
     
 <nav id="article-nav">
   
-    <a href="/2017/02/19/Java中catch语句中的return-对finally的影响/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2017/02/23/Java内置锁锁的是对象的实例/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Java中catch语句中的return 对finally的影响
+          Java内置锁锁的是对象的实例
         
       </div>
     </a>
   
   
-    <a href="/2017/02/11/JavaScript-Loadash库的使用/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2017/02/21/设计模式之单例模式/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">JavaScript Loadash库的使用</div>
+      <div class="article-nav-title">设计模式之单例模式</div>
     </a>
   
 </nav>
