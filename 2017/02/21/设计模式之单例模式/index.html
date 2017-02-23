@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>设计模式之单例模式 | Terrance&#39;s Book Read Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="单例模式保证就一个势力，减少了系统的实例化的消耗12345678910//饱汉模式，没有多线程问题class Singleton&amp;#123;    static Singleton instance = new Singleton();    private Singleton()&amp;#123;&amp;#125;    public static Singleton getInstance()&amp;#123;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之单例模式">
+<meta property="og:url" content="http://yoursite.com/2017/02/21/设计模式之单例模式/index.html">
+<meta property="og:site_name" content="Terrance's Book Read Note">
+<meta property="og:description" content="单例模式保证就一个势力，减少了系统的实例化的消耗12345678910//饱汉模式，没有多线程问题class Singleton&amp;#123;    static Singleton instance = new Singleton();    private Singleton()&amp;#123;&amp;#125;    public static Singleton getInstance()&amp;#123;">
+<meta property="og:updated_time" content="2017-02-21T13:43:32.798Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式之单例模式">
+<meta name="twitter:description" content="单例模式保证就一个势力，减少了系统的实例化的消耗12345678910//饱汉模式，没有多线程问题class Singleton&amp;#123;    static Singleton instance = new Singleton();    private Singleton()&amp;#123;&amp;#125;    public static Singleton getInstance()&amp;#123;">
+  
+    <link rel="alternate" href="/atom.xml" title="Terrance&#39;s Book Read Note" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Terrance&#39;s Book Read Note</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-设计模式之单例模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/21/设计模式之单例模式/" class="article-date">
+  <time datetime="2017-02-21T13:38:25.000Z" itemprop="datePublished">2017-02-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      设计模式之单例模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="单例模式保证就一个势力，减少了系统的实例化的消耗"><a href="#单例模式保证就一个势力，减少了系统的实例化的消耗" class="headerlink" title="单例模式保证就一个势力，减少了系统的实例化的消耗"></a>单例模式保证就一个势力，减少了系统的实例化的消耗</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//饱汉模式，没有多线程问题</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</div><div class="line">    <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//多线程安全模式</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreadSafeSingleton</span></span>&#123;</div><div class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> ThreadSafeSingleton instance;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="title">ThreadSafeSingleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ThreadSafeSingleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</div><div class="line">        <span class="keyword">synchronized</span>(ThreadSafeSingleton.class)&#123;</div><div class="line">            <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;                </div><div class="line">                instance = <span class="keyword">new</span> ThreadSafeSingleton();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>或者线程安全的饱汉模式,当实例化需要依赖一部分操作时候，希望第一遍getInstance时实例化，以后getInstance不再初始化.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton singleton = <span class="keyword">new</span> Singleton();</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span>  </span>&#123;    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span>   </span>&#123;</div><div class="line">        <span class="keyword">return</span> singleton;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>effective java中推荐的方法,只在调用getInstance的时候初始化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>终极模式,但是无法包含自有初始化逻辑.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Singleton&#123;</div><div class="line">   INSTANCE;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/21/设计模式之单例模式/" data-id="cizfl3hxi0007fscdvz9xfv0i" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/02/21/设计模式之工厂模式/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">设计模式之工厂模式</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/21/设计模式之单例模式/">设计模式之单例模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/21/设计模式之工厂模式/">设计模式之工厂模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/20/Java内置的观察者实现工具/">Java内置的观察者实现工具</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/20/设计模式之装饰模式/">设计模式之装饰模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/19/Java中catch语句中的return-对finally的影响/">Java中catch语句中的return 对finally的影响</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Terrance&#39;s Book Read Note<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

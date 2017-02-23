@@ -61,6 +61,97 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-设计模式之单例模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/21/设计模式之单例模式/" class="article-date">
+  <time datetime="2017-02-21T13:38:25.000Z" itemprop="datePublished">2017-02-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/21/设计模式之单例模式/">设计模式之单例模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="单例模式保证就一个势力，减少了系统的实例化的消耗"><a href="#单例模式保证就一个势力，减少了系统的实例化的消耗" class="headerlink" title="单例模式保证就一个势力，减少了系统的实例化的消耗"></a>单例模式保证就一个势力，减少了系统的实例化的消耗</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//饱汉模式，没有多线程问题</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</div><div class="line">    <span class="keyword">static</span> Singleton instance = <span class="keyword">new</span> Singleton();</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> instance;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//多线程安全模式</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreadSafeSingleton</span></span>&#123;</div><div class="line"><span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> ThreadSafeSingleton instance;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">private</span> <span class="title">ThreadSafeSingleton</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ThreadSafeSingleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</div><div class="line">    <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;</div><div class="line">        <span class="keyword">synchronized</span>(ThreadSafeSingleton.class)&#123;</div><div class="line">            <span class="keyword">if</span>(instance==<span class="keyword">null</span>)&#123;                </div><div class="line">                instance = <span class="keyword">new</span> ThreadSafeSingleton();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li><p>或者线程安全的饱汉模式,当实例化需要依赖一部分操作时候，希望第一遍getInstance时实例化，以后getInstance不再初始化.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton singleton = <span class="keyword">new</span> Singleton();</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span>  </span>&#123;    &#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span>   </span>&#123;</div><div class="line">        <span class="keyword">return</span> singleton;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>effective java中推荐的方法,只在调用getInstance的时候初始化</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton();</div><div class="line">    &#125;</div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>终极模式,但是无法包含自有初始化逻辑.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Singleton&#123;</div><div class="line">   INSTANCE;</div><div class="line">&#125;</div></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/21/设计模式之单例模式/" data-id="cizfl3hxi0007fscdvz9xfv0i" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-设计模式之工厂模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/21/设计模式之工厂模式/" class="article-date">
+  <time datetime="2017-02-21T13:38:00.000Z" itemprop="datePublished">2017-02-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/02/21/设计模式之工厂模式/">设计模式之工厂模式</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>工厂模式是用来封装对象的创建，工厂方法模板用过让子类决定转件什么对象，来达到将对象创建封装的目的<a href="">via <strong>Head First 设计模式</strong></a></p>
+<p>工厂方法模式定义了一个创建对象的接口，当由于子类决定要实例化的类是哪一个，工厂方法让类的实例化推迟到子类</p>
+<p>抽象工厂模式提供一个接口,用于创建相关或者依赖的对象的价值，而不需要明确指定具体类.</p>
+</blockquote>
+<p>两者的具体区别还需要细细体会</p>
+<h3 id="两者的比较"><a href="#两者的比较" class="headerlink" title="两者的比较"></a>两者的比较</h3><p><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_1.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_2.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_3.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_4.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_5.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_6.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_7.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/21/设计模式之工厂模式/" data-id="cizfl3hxs0009fscdbw9dga8j" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Java内置的观察者实现工具" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/02/20/Java内置的观察者实现工具/" class="article-date">
@@ -91,7 +182,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/20/Java内置的观察者实现工具/" data-id="cize4p68000061ccdeguqp79t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/20/Java内置的观察者实现工具/" data-id="cizfl3hx50003fscd4mq9vt0l" class="article-share-link">Share</a>
       
       
     </footer>
@@ -131,7 +222,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/20/设计模式之装饰模式/" data-id="cize4p68300071ccduqkn5n3g" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/20/设计模式之装饰模式/" data-id="cizfl3hxq0008fscd7lr6gbmn" class="article-share-link">Share</a>
       
       
     </footer>
@@ -174,7 +265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/19/Java中catch语句中的return-对finally的影响/" data-id="cize4p67j00011ccdt64sdora" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/19/Java中catch语句中的return-对finally的影响/" data-id="cizfl3hx20002fscdabptun7t" class="article-share-link">Share</a>
       
       
     </footer>
@@ -217,7 +308,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/14/20017年读书计划/" data-id="cize4p67d00001ccd0tzy3t7j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/14/20017年读书计划/" data-id="cizfl3hwf0000fscd1fu7f4j6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -259,7 +350,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/11/JavaScript-Loadash库的使用/" data-id="cize4p67o00021ccdswlgr8le" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/11/JavaScript-Loadash库的使用/" data-id="cizfl3hwl0001fscds112lz4e" class="article-share-link">Share</a>
       
       
     </footer>
@@ -298,7 +389,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/02/11/我的第二篇文档/" data-id="cize4p67w00051ccdruxnkdu2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/02/11/我的第二篇文档/" data-id="cizfl3hxb0005fscdrsjl9ar8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -334,7 +425,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/21/test/" data-id="cize4p67u00041ccd411quwc0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/21/test/" data-id="cizfl3hxf0006fscdd1h2dbeq" class="article-share-link">Share</a>
       
       
     </footer>
@@ -379,7 +470,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2017/01/21/hello-world/" data-id="cize4p67r00031ccd7n51wz0v" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2017/01/21/hello-world/" data-id="cizfl3hx70004fscdvk0bkhi9" class="article-share-link">Share</a>
       
       
     </footer>
@@ -419,6 +510,14 @@
       <ul>
         
           <li>
+            <a href="/2017/02/21/设计模式之单例模式/">设计模式之单例模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/21/设计模式之工厂模式/">设计模式之工厂模式</a>
+          </li>
+        
+          <li>
             <a href="/2017/02/20/Java内置的观察者实现工具/">Java内置的观察者实现工具</a>
           </li>
         
@@ -428,14 +527,6 @@
         
           <li>
             <a href="/2017/02/19/Java中catch语句中的return-对finally的影响/">Java中catch语句中的return 对finally的影响</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/14/20017年读书计划/">2017年读书计划</a>
-          </li>
-        
-          <li>
-            <a href="/2017/02/11/JavaScript-Loadash库的使用/">JavaScript Loadash库的使用</a>
           </li>
         
       </ul>

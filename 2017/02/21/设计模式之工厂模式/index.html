@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>设计模式之工厂模式 | Terrance&#39;s Book Read Note</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="工厂模式是用来封装对象的创建，工厂方法模板用过让子类决定转件什么对象，来达到将对象创建封装的目的via Head First 设计模式
+工厂方法模式定义了一个创建对象的接口，当由于子类决定要实例化的类是哪一个，工厂方法让类的实例化推迟到子类
+抽象工厂模式提供一个接口,用于创建相关或者依赖的对象的价值，而不需要明确指定具体类.
+
+两者的具体区别还需要细细体会
+两者的比较">
+<meta property="og:type" content="article">
+<meta property="og:title" content="设计模式之工厂模式">
+<meta property="og:url" content="http://yoursite.com/2017/02/21/设计模式之工厂模式/index.html">
+<meta property="og:site_name" content="Terrance's Book Read Note">
+<meta property="og:description" content="工厂模式是用来封装对象的创建，工厂方法模板用过让子类决定转件什么对象，来达到将对象创建封装的目的via Head First 设计模式
+工厂方法模式定义了一个创建对象的接口，当由于子类决定要实例化的类是哪一个，工厂方法让类的实例化推迟到子类
+抽象工厂模式提供一个接口,用于创建相关或者依赖的对象的价值，而不需要明确指定具体类.
+
+两者的具体区别还需要细细体会
+两者的比较">
+<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_3.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_4.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_5.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_6.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_7.png">
+<meta property="og:updated_time" content="2017-02-21T13:45:46.580Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式之工厂模式">
+<meta name="twitter:description" content="工厂模式是用来封装对象的创建，工厂方法模板用过让子类决定转件什么对象，来达到将对象创建封装的目的via Head First 设计模式
+工厂方法模式定义了一个创建对象的接口，当由于子类决定要实例化的类是哪一个，工厂方法让类的实例化推迟到子类
+抽象工厂模式提供一个接口,用于创建相关或者依赖的对象的价值，而不需要明确指定具体类.
+
+两者的具体区别还需要细细体会
+两者的比较">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_1.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Terrance&#39;s Book Read Note" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Terrance&#39;s Book Read Note</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-设计模式之工厂模式" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/02/21/设计模式之工厂模式/" class="article-date">
+  <time datetime="2017-02-21T13:38:00.000Z" itemprop="datePublished">2017-02-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      设计模式之工厂模式
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>工厂模式是用来封装对象的创建，工厂方法模板用过让子类决定转件什么对象，来达到将对象创建封装的目的<a href="">via <strong>Head First 设计模式</strong></a></p>
+<p>工厂方法模式定义了一个创建对象的接口，当由于子类决定要实例化的类是哪一个，工厂方法让类的实例化推迟到子类</p>
+<p>抽象工厂模式提供一个接口,用于创建相关或者依赖的对象的价值，而不需要明确指定具体类.</p>
+</blockquote>
+<p>两者的具体区别还需要细细体会</p>
+<h3 id="两者的比较"><a href="#两者的比较" class="headerlink" title="两者的比较"></a>两者的比较</h3><p><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_1.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_2.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_3.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_4.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_5.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_6.png" alt=""><br><img src="https://raw.githubusercontent.com/cqian59420/githubPageResources/master/2/21/factroyVsAbstractFactory_7.png" alt=""></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2017/02/21/设计模式之工厂模式/" data-id="cizfl3hxs0009fscdbw9dga8j" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/02/21/设计模式之单例模式/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          设计模式之单例模式
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/02/20/Java内置的观察者实现工具/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Java内置的观察者实现工具</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">January 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2017/02/21/设计模式之单例模式/">设计模式之单例模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/21/设计模式之工厂模式/">设计模式之工厂模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/20/Java内置的观察者实现工具/">Java内置的观察者实现工具</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/20/设计模式之装饰模式/">设计模式之装饰模式</a>
+          </li>
+        
+          <li>
+            <a href="/2017/02/19/Java中catch语句中的return-对finally的影响/">Java中catch语句中的return 对finally的影响</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 Terrance&#39;s Book Read Note<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
